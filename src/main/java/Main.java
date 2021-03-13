@@ -1,5 +1,4 @@
 import controllers.MainController;
-import controllers.StoreController;
 import io.javalin.Javalin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinThymeleaf;
