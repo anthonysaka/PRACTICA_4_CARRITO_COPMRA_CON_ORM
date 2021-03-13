@@ -38,7 +38,6 @@ public class ORMDBManage<T> {
                 try {
                     f.setAccessible(true);
                     Object valorCampo = f.get(entidad);
-
                     System.out.println("Nombre del campo: "+f.getName());
                     System.out.println("Tipo del campo: "+f.getType().getName());
                     System.out.println("Valor del campo: "+valorCampo );
