@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sakamoto Shop</title>
+
+    <!-- FONTS & ICONS  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto:wght@300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <link rel="stylesheet" href="/css/main.css"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+</head>
+<body>
+
+<!-- NAVIGATION BAR -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-md">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">SAKAMOTO's</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarNavResponsive"
+                aria-controls="navbarNavResponsive"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNavResponsive">
+            <ul class="navbar-nav text-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/productsadmin/saleshistory">Sales History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/productsadmin">Manage Products</a>
+                </li>
+                <li class="nav-item">
+                    <a id="cm" class="nav-link" href="/cart">Cart <span class="badge badge-pill badge-success"  th:text="${itemCant}"></span></a>
+                </li>
+                <li class="nav-item">
+                    <form method="get" action="/login">
+                        <button type="submit" class="mt-4 btn btn-primary btn-md">LOGIN</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form method="get" action="/logout">
+                        <button type="submit" class="mt-4 btn btn-primary btn-md">LOGOUT</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2 th:text="'Product Details - '+${prod.id} + ' ' + ${prod.name}"></h2>
+                </div>
+                <div class="col-sm-6">
+                    <!-- pensar que poner aqui-->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="container-fluid">
+                        <ul>
+                            <li th:text="'ID:'+${prod.id}"></li>
+                            <li th:text="'Name:'+${prod.name}"></li>
+                            <li th:text="'Price:'+${prod.price}"></li>
+                            <li th:text="'Description:'+${prod.description}"></li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="container-fluid">
+                        <div th:id="'carouselExampleIndicators'+${prod.id}" class="carousel slide container-fluid" data-ride="carousel" style="width: 480px; height: 100%;">
+                            <div class="carousel-inner">
+                                <div class="carousel-item" th:each="foto : ${prod.fotos}" th:class="${fotoStat.first}? 'carousel-item active' : 'carousel-item'">
+                                    <img class="d-block w-100" th:src="@{'data:'+${foto.getMimeType()}+';base64,'+${foto.getFotoBase64()}}" alt="First slide">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" th:href="'#carouselExampleIndicators'+${prod.id}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                            <a class="carousel-control-next" th:href="'#carouselExampleIndicators'+${prod.id}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Siguiente</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-sm-5">
+                <form action="/comment/add" method="post">
+                    <div class="form-group">
+                        <label for="content">Comentar producto con id: <span><input style="width:60px" type="text" name="id" readonly th:value="''+${prod.id}"></span></label>
+                        <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+                        <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-7">
+
+                <table class="table table-striped justify-content-center" style="table-layout: fixed;">
+                    <thead>
+                    <tr>
+                        <th scope="col">Comentario</th>
+                        <th scope="col"> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="comentario : ${comment}">
+                        <td th:text="${comentario.texto}" style="word-break: break-all;">Nombre Producto</td>
+                        <td th:switch="${user}">
+                                <span th:case="'admin'">
+                                    <form th:action="'/comment/delete/'+${comentario.id}" method="post">
+                                        <input id="id" name="id" type="hidden" th:value="${prod.id}">
+                                         <button class="btn btn-sm add" type="submit"><span class="material-icons">delete</span></button>
+                                    </form>
+                                </span>
+                            <div th:case="*">
+
+                            </div>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+</body>
+</html>
